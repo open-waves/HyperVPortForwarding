@@ -11,7 +11,9 @@ namespace MakingWaves.Tools.HyperVPortForwarding
 {
     public partial class MainWindow
     {
-        private const string ListenPort = "Local port";
+        private const string LocalPort = "Local port";
+        private const string VmAddress = "VM address";
+        private const string VmPort = "VM port";
 
         private ObservableCollection<String> _items;
         public ObservableCollection<String> Items
@@ -39,7 +41,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             ClearInputs();
             if (PortsList.SelectedItem == null)
             {
-                ValidationLabel.Content = "Please select Listen port";
+                ValidationLabel.Content = "Please select active forwarding porto to delete";
                 ValidationLabel.Visibility = Visibility.Visible;
             }
             else
@@ -58,7 +60,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
                 }
                 else
                 {
-                    ValidationLabel.Content = "Listen port is empty!";
+                    ValidationLabel.Content = LocalPort + " is empty!";
                 }
             }
 
@@ -70,7 +72,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             if (String.IsNullOrEmpty(AddListenPort.Text) || String.IsNullOrEmpty(AddConnectAddress.Text) ||
                 String.IsNullOrEmpty(AddConnectPort.Text) || int.Parse(AddListenPort.Text) == 0 || int.Parse(AddConnectPort.Text) == 0)
             {
-                ValidationLabel.Content = "Please set Listen port, Connect port and Connect address";
+                ValidationLabel.Content = String.Format("Please set {0}, {1} and {2}", LocalPort, VmAddress, VmPort);
                 ValidationLabel.Visibility = Visibility.Visible;
                 SelectErrorTextBox(AddConnectAddress);
                 SelectErrorTextBox(AddListenPort);
@@ -163,7 +165,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             if (e.Data.StartsWith("*"))
             {
                 var strs = e.Data.Split(' ').Where(s => !String.IsNullOrEmpty(s) && s != "*").ToArray();
-                var str = String.Format(ListenPort + ": {0}, VM address: {1}, VM port: {2}", strs[0], strs[1],
+                var str = String.Format("{0}: {1}, {2}: {3}, {4}: {5}", LocalPort, strs[0], VmAddress, strs[1], VmPort,
                     strs[2]);
 
                 Dispatcher.BeginInvoke(new Action(() => _items.Add(str)));
