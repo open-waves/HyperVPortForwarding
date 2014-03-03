@@ -20,12 +20,14 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             _dispatcher = Dispatcher.CurrentDispatcher;
             RefreshConnections();
             VmIpAddress = "192.168.137.4";
+            HostPort = 80;
+            VmPort = 17000;
         }
 
         public ObservableCollection<ForwardedPort> Items { get; set; }
 
-        public string HostPort { get; set; }
-        public string VmPort { get; set; }
+        public int? HostPort { get; set; }
+        public int? VmPort { get; set; }
 
         private string _vmIpAddress;
         public string VmIpAddress
@@ -52,8 +54,8 @@ namespace MakingWaves.Tools.HyperVPortForwarding
                 return _addPortCommand ?? (_addPortCommand = new RelayCommand(param => OnAddPortCommand(), param =>
                 {
                     IPAddress ipAddress;
-                    return string.IsNullOrWhiteSpace(HostPort) == false 
-                        && IPAddress.TryParse(VmIpAddress, out ipAddress);
+                    // When Virtual Machine port is not set, it will be by default the same as in Host Post 
+                    return HostPort != null && IPAddress.TryParse(VmIpAddress, out ipAddress);
                 }));
             }
         }

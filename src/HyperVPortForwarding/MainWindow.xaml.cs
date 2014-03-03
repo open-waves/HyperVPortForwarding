@@ -10,12 +10,6 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             InitializeComponent();
         }
 
-        private void PreviewTextInputForPortNumber(object sender, TextCompositionEventArgs e)
-        {
-            var regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
-
         private void PreviewTextInputForIpAddress(object sender, TextCompositionEventArgs e)
         {
             var regex = new Regex("[^0-9.]+");
