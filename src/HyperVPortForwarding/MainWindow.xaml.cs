@@ -26,12 +26,12 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             InitializeComponent();
             PortsList.ItemsSource = Items;
 
-            RefreshConnections(null, null);
+            RefreshConnections();
         }
 
-        private void RefreshConnections(object sender, RoutedEventArgs e)
+        private void RefreshConnections()
         {
-            if (sender != null && e != null)
+//            if (sender != null && e != null)
                 ClearInputs();
 
             _items.Clear();
@@ -41,31 +41,23 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         private void Delete_OnClick(object sender, RoutedEventArgs e)
         {
             ClearInputs();
-            if (PortsList.SelectedItem == null)
+        
+            ValidationLabel.Visibility = Visibility.Visible;
+            ValidationLabel.Content = "Possible outcome:\n" +
+                                        "Blank window - deletion of port forwarding completed successfully\n" +
+                                        "'The system cannot find the file specified.' - no existing forwarding\n" +
+                                        "'The requested operation requires elevation (Run as administrator)' - run program\nas administrator";
+            var splitted = PortsList.SelectedValue.ToString().Split(',')[0].Split(' ');
+            var deletedListenPort = splitted[splitted.Count() - 1];
+            if (!String.IsNullOrEmpty(deletedListenPort))
             {
-                ValidationLabel.Content = "Please select active forwarding porto to delete";
-                ValidationLabel.Visibility = Visibility.Visible;
+                RunReadProcess("netsh interface portproxy delete v4tov4 " + deletedListenPort);
+                RefreshConnections();
             }
             else
             {
-                ValidationLabel.Visibility = Visibility.Visible;
-                ValidationLabel.Content = "Possible outcome:\n" +
-                                          "Blank window - deletion of port forwarding completed successfully\n" +
-                                          "'The system cannot find the file specified.' - no existing forwarding\n" +
-                                          "'The requested operation requires elevation (Run as administrator)' - run program\nas administrator";
-                var splitted = PortsList.SelectedValue.ToString().Split(',')[0].Split(' ');
-                var deletedListenPort = splitted[splitted.Count() - 1];
-                if (!String.IsNullOrEmpty(deletedListenPort))
-                {
-                    RunReadProcess("netsh interface portproxy delete v4tov4 " + deletedListenPort);
-                    RefreshConnections(null, null);
-                }
-                else
-                {
-                    ValidationLabel.Content = LocalPort + " is empty!";
-                }
+                ValidationLabel.Content = LocalPort + " is empty!";
             }
-
         }
 
         private void Add_OnClick(object sender, RoutedEventArgs e)
@@ -74,6 +66,8 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             if (String.IsNullOrEmpty(AddListenPort.Text) || String.IsNullOrEmpty(AddConnectAddress.Text) ||
                 String.IsNullOrEmpty(AddConnectPort.Text) || int.Parse(AddListenPort.Text) == 0 || int.Parse(AddConnectPort.Text) == 0)
             {
+                // validation
+                return;
                 ValidationLabel.Content = String.Format("Please set {0}, {1} and {2}", LocalPort, VmAddress, VmPort);
                 ValidationLabel.Visibility = Visibility.Visible;
                 SelectErrorTextBox(AddConnectAddress);
@@ -82,14 +76,21 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             }
             else
             {
-                ValidationLabel.Visibility = Visibility.Visible;
-                ValidationLabel.Content = "Desire outcome:\n" +
-                                          "Blank window - port forwarding completed successfully\n" +
-                                          "'The requested operation requires elevation (Run as administrator)' - run program\nas administrator";
+                if (WithValidation)
+                {
+                    ValidationLabel.Visibility = Visibility.Visible;
+                    ValidationLabel.Content = "Desire outcome:\n" +
+                                              "Blank window - port forwarding completed successfully\n" +
+                                              "'The requested operation requires elevation (Run as administrator)' - run program\nas administrator";
+                    
+                } 
+                
                 RunReadProcess(String.Format("netsh interface portproxy add v4tov4 {0} {1} {2}", AddListenPort.Text, AddConnectAddress.Text, AddConnectPort.Text));
-                RefreshConnections(null, null);
+                RefreshConnections();
             }
         }
+
+        public bool WithValidation = false;
 
         private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -109,6 +110,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
 
         private void ClearInputs()
         {
+            return;
             ValidationLabel.Visibility = Visibility.Hidden;
             AddConnectAddress.BorderThickness = new Thickness(1.0);
             AddConnectAddress.BorderBrush = Brushes.DarkGray;
