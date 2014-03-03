@@ -52,9 +52,9 @@
                     <Label Grid.Row="0" Grid.Column="0">Host Port:</Label>
                     <Label Grid.Row="0" Grid.Column="1">Virtual Machine IP Address:</Label>
                     <Label Grid.Row="0" Grid.Column="2">Virtual Machine Port:</Label>
-                    <xctk:IntegerUpDown Value="{Binding Path=HostPort}" ToolTip="IPv4 port on which to listen" Grid.Row="1" Grid.Column="0"/>
-                    <TextBox VerticalContentAlignment="Center" Text="{Binding Path=VmIpAddress}" PreviewTextInput="PreviewTextInputForIpAddress" ToolTip="IPv4 address to which to connect" Grid.Row="1" Grid.Column="1"/>
-                    <xctk:IntegerUpDown Value="{Binding Path=VmPort}" ToolTip="IPv4 port to which to connect" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="0.2,0.6,92.6,-1"/>
+                    <xctk:IntegerUpDown Value="{Binding Path=HostPort}" Grid.Row="1" Grid.Column="0"/>
+                    <TextBox VerticalContentAlignment="Center" Text="{Binding Path=VmIpAddress}" PreviewTextInput="PreviewTextInputForIpAddress" Grid.Row="1" Grid.Column="1"/>
+                    <xctk:IntegerUpDown Value="{Binding Path=VmPort}" Grid.Row="1" Grid.Column="2" ToolTip="When empty - Host Port will be used" Grid.ColumnSpan="2" Margin="0,0,92,0"/>
                     <Button HorizontalAlignment="Right" Margin="14,0,0,0" Command="{Binding AddPortCommand}" Grid.Row="1" Grid.Column="3">Add</Button>
                 </Grid>
             </GroupBox>
