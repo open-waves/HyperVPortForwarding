@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
 
         public string HostPort { get; set; }
         public string VmPort { get; set; }
-        
+
         private string _vmIpAddress;
         public string VmIpAddress
         {
@@ -85,7 +86,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             RefreshConnections();
         }
 
-        
+
         RelayCommand _removeAllPortsCommand;
         public ICommand RemoveAllPortsCommand
         {
@@ -108,21 +109,32 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         private void RunProcess(string args)
         {
             var process = CreateProcess(args);
-            process.OutputDataReceived += process_OutputDataReceived;
             process.Start();
-            process.BeginOutputReadLine();
+
+            var outputReader = process.StandardOutput;
             process.WaitForExit();
-        }
 
-        private void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(e.Data) || e.Data.StartsWith("*") == false)
-                return;
+            var fullResponse = outputReader.ReadToEnd();
 
-            var forwardedPort = new ForwardedPortFactory().Create(e.Data);
+            var ports = new List<ForwardedPort>();
+            var lines = fullResponse.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var line in lines)
+            {
+                if (String.IsNullOrWhiteSpace(line) || line.StartsWith("*") == false)
+                    continue;
 
-            Action del = () => Items.Add(forwardedPort);
-            _dispatcher.BeginInvoke(del);
+                var forwardedPort = new ForwardedPortFactory().Create(line);
+                ports.Add(forwardedPort);
+            }
+
+            ports = ports.OrderBy(p => p.HostPort).ToList();
+
+            foreach (var forwardedPort in ports)
+            {
+                var item = Tuple.Create(forwardedPort);
+                Action del = () => Items.Add(item.Item1);
+                _dispatcher.BeginInvoke(del);
+            }
         }
 
         private static void RunReadProcess(string args)
