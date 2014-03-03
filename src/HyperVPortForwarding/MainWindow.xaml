@@ -57,21 +57,21 @@
                                   CanUserAddRows="False" 
                                   >
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Host Port" Width="auto" IsReadOnly="True">
+                                <DataGridTemplateColumn Header="Host Port" Width="*" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=HostPort}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Virtual Machine IP Address" Width="auto" IsReadOnly="True">
+                                <DataGridTemplateColumn Header="Virtual Machine IP Address" Width="*" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=VmIpAddress}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Virtual Machine Port" Width="auto" IsReadOnly="True">
+                                <DataGridTemplateColumn Header="Virtual Machine Port" Width="*" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=VmPort}" />
