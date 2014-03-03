@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -46,7 +48,12 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         {
             get
             {
-                return _addPortCommand ?? (_addPortCommand = new RelayCommand(param => OnAddPortCommand(), param => true));
+                return _addPortCommand ?? (_addPortCommand = new RelayCommand(param => OnAddPortCommand(), param =>
+                {
+                    IPAddress ipAddress;
+                    return string.IsNullOrWhiteSpace(HostPort) == false 
+                        && IPAddress.TryParse(VmIpAddress, out ipAddress);
+                }));
             }
         }
 
@@ -68,13 +75,33 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         {
             get
             {
-                return _removePortCommand ?? (_removePortCommand = new RelayCommand(param => OnRemovePortCommand(), param => true));
+                return _removePortCommand ?? (_removePortCommand = new RelayCommand(param => OnRemovePortCommand(), param => SelectedForwardedPort != null));
             }
         }
 
         private void OnRemovePortCommand()
         {
-            RunReadProcess("netsh interface portproxy delete v4tov4 " + SelectedForwardedPort.HostPort); // TODO not sure
+            RunReadProcess("netsh interface portproxy delete v4tov4 " + SelectedForwardedPort.HostPort);
+            RefreshConnections();
+        }
+
+        
+        RelayCommand _removeAllPortsCommand;
+        public ICommand RemoveAllPortsCommand
+        {
+            get
+            {
+                return _removeAllPortsCommand ?? (_removeAllPortsCommand = new RelayCommand(param => OnRemoveAllPortsCommand(), param => Items.Any()));
+            }
+        }
+
+        private void OnRemoveAllPortsCommand()
+        {
+            foreach (var forwardedPort in Items)
+            {
+                RunReadProcess("netsh interface portproxy delete v4tov4 " + forwardedPort.HostPort);
+            }
+
             RefreshConnections();
         }
 
