@@ -55,6 +55,10 @@
                                   SelectionMode="Single" SelectionUnit="FullRow"
                                   AlternatingRowBackground="Gainsboro"  AlternationCount="2"
                                   CanUserAddRows="False" 
+                                  BorderThickness="2"
+                                  BorderBrush="DarkGray"
+                                  HorizontalGridLinesBrush="Transparent"
+                                  VerticalGridLinesBrush="Transparent"
                                   >
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="Host Port" Width="*" IsReadOnly="True">
