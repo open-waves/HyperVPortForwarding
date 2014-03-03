@@ -16,9 +16,23 @@ namespace MakingWaves.Tools.HyperVPortForwarding
 
             _dispatcher = Dispatcher.CurrentDispatcher;
             RefreshConnections();
+            VmIpAddress = "192.168.137.4";
         }
 
         public ObservableCollection<ForwardedPort> Items { get; set; }
+
+        public string HostPort { get; set; }
+        public string VmPort { get; set; }
+        
+        private string _vmIpAddress;
+        public string VmIpAddress
+        {
+            get { return _vmIpAddress; }
+            set
+            {
+                SetField(ref _vmIpAddress, value, () => VmIpAddress);
+            }
+        }
 
         private ForwardedPort _selectedForwardedPort;
         public ForwardedPort SelectedForwardedPort
@@ -38,25 +52,9 @@ namespace MakingWaves.Tools.HyperVPortForwarding
 
         private void OnAddPortCommand()
         {
-            // TODO validation
-//                        if (String.IsNullOrEmpty(AddListenPort.Text) || String.IsNullOrEmpty(AddConnectAddress.Text) ||
-//                            String.IsNullOrEmpty(AddConnectPort.Text) || int.Parse(AddListenPort.Text) == 0 || int.Parse(AddConnectPort.Text) == 0)
-//                        {
-//                            // validation
-//                            return;
-//                            ValidationLabel.Content = String.Format("Please set {0}, {1} and {2}", LocalPort, VmAddress, VmPort);
-//                            ValidationLabel.Visibility = Visibility.Visible;
-//                            SelectErrorTextBox(AddConnectAddress);
-//                            SelectErrorTextBox(AddListenPort);
-//                            SelectErrorTextBox(AddConnectPort);
-//                        }
-//                        else
-            {
-                // TODO todo
-                RunReadProcess(String.Format("netsh interface portproxy add v4tov4 {0} {1} {2}", 8003, "192.168.2.2", 8003));
+            RunReadProcess(String.Format("netsh interface portproxy add v4tov4 {0} {1} {2}", HostPort, VmIpAddress, VmPort));
 
-                RefreshConnections();
-            }
+            RefreshConnections();
         }
 
         public void RefreshConnections()

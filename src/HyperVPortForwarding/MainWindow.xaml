@@ -8,11 +8,11 @@
         <GroupBox Header="Adding new forwarding port" Width="600" Margin="10,10,9.2,530.4" >
             <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal">
                 <!--<Label Width="100" VerticalAlignment="Top" ToolTip="IPv4 address to which to connect">VM addess:</Label>-->
-                <TextBox Text="192.168.137.2" Name="AddConnectAddress" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" PreviewTextInput="PreviewTextInputForIpAddress" ToolTip="IPv4 address to which to connect"></TextBox>
+                <TextBox Text="{Binding Path=VmIpAddress}" Name="AddConnectAddress" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" PreviewTextInput="PreviewTextInputForIpAddress" ToolTip="IPv4 address to which to connect"></TextBox>
                 <!--<Label Width="100" Margin="176,15,0,0" HorizontalAlignment="Left" Height="29" VerticalAlignment="Top" ToolTip="IPv4 port on which to listen">Local port:</Label>-->
-                <TextBox Name="AddListenPort" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" PreviewTextInput="PreviewTextInputForPortNumber" ToolTip="IPv4 port on which to listen"/>
+                <TextBox Text="{Binding Path=HostPort}" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" PreviewTextInput="PreviewTextInputForPortNumber" ToolTip="IPv4 port on which to listen"/>
                 <!--<Label Width="100" Margin="323,15,0,0" HorizontalAlignment="Left" Height="29" VerticalAlignment="Top" ToolTip="IPv4 port to which to connect">VM port:</Label>-->
-                <TextBox Name="AddConnectPort" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" PreviewTextInput="PreviewTextInputForPortNumber"  ToolTip="IPv4 port to which to connect"/>
+                <TextBox Text="{Binding Path=VmPort}" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" PreviewTextInput="PreviewTextInputForPortNumber"  ToolTip="IPv4 port to which to connect"/>
                 <Button Name="Add" HorizontalAlignment="Left" Width="73" Height="25" Command="{Binding AddPortCommand}" RenderTransformOrigin="0.5,0.504">Add</Button>
             </StackPanel>
         </GroupBox>
