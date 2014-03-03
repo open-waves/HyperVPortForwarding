@@ -4,7 +4,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="Hyper V Port Forwarding" 
         DataContext="{StaticResource MainViewModel}"
-        Width="550" MinWidth="550" MaxWidth="550" MinHeight="350" Height="350"
+        Width="550" MinWidth="550" MaxWidth="550" MinHeight="340" Height="340"
         >
     <Window.Resources>
         <Style TargetType="Label">
