@@ -1,26 +1,36 @@
 ﻿<Window x:Class="MakingWaves.Tools.HyperVPortForwarding.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Hyper V Port Forwarding" Height="640" Width="626" Name="MW">
+        Title="Hyper V Port Forwarding" Height="640" Width="626" Name="MW"
+        DataContext="{StaticResource MainViewModel}"
+        >
     <Grid Background="DarkGray">
         <GroupBox Header="Adding new forwarding port" Width="600" Margin="10,10,9.2,530.4" >
             <StackPanel FlowDirection="LeftToRight" Orientation="Horizontal">
                 <!--<Label Width="100" VerticalAlignment="Top" ToolTip="IPv4 address to which to connect">VM addess:</Label>-->
-                <TextBox Text="192.168.137.2" Name="AddConnectAddress" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" ToolTip="IPv4 address to which to connect"></TextBox>
+                <TextBox Text="192.168.137.2" Name="AddConnectAddress" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" PreviewTextInput="PreviewTextInputForIpAddress" ToolTip="IPv4 address to which to connect"></TextBox>
                 <!--<Label Width="100" Margin="176,15,0,0" HorizontalAlignment="Left" Height="29" VerticalAlignment="Top" ToolTip="IPv4 port on which to listen">Local port:</Label>-->
-                <TextBox Name="AddListenPort" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" TextChanged="TextBox_OnTextChanged" ToolTip="IPv4 port on which to listen"/>
+                <TextBox Name="AddListenPort" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" PreviewTextInput="PreviewTextInputForPortNumber" ToolTip="IPv4 port on which to listen"/>
                 <!--<Label Width="100" Margin="323,15,0,0" HorizontalAlignment="Left" Height="29" VerticalAlignment="Top" ToolTip="IPv4 port to which to connect">VM port:</Label>-->
-                <TextBox Name="AddConnectPort" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" TextChanged="TextBox_OnTextChanged" ToolTip="IPv4 port to which to connect"/>
-                <Button Name="Add" HorizontalAlignment="Left" Width="73" Height="25" Click="Add_OnClick">Add</Button>
+                <TextBox Name="AddConnectPort" Width="100" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" PreviewTextInput="PreviewTextInputForPortNumber"  ToolTip="IPv4 port to which to connect"/>
+                <Button Name="Add" HorizontalAlignment="Left" Width="73" Height="25" Command="{Binding AddPortCommand}" RenderTransformOrigin="0.5,0.504">Add</Button>
             </StackPanel>
         </GroupBox>
 
-        <Button Name="Delete" IsEnabled="{Binding ElementName=PortsList, Path=SelectedItems.Count}"  Margin="510,104,0,0" RenderTransformOrigin="2.8,0.467" HorizontalAlignment="Left" Width="73" Height="25" VerticalAlignment="Top" Click="Delete_OnClick">Delete</Button>
+        <Button Name="Delete" IsEnabled="{Binding ElementName=PortsList, Path=SelectedItems.Count}"  Margin="510,104,0,0" RenderTransformOrigin="2.8,0.467" HorizontalAlignment="Left" Width="73" Height="25" VerticalAlignment="Top" Command="{Binding RemovePortCommand}">Remove</Button>
         <Label Foreground="#FFFD1801" Visibility="Visible" Name="ValidationLabel" Height="96" VerticalAlignment="Top" HorizontalAlignment="Left" Width="443" Margin="35,492,0,0" FlowDirection="LeftToRight">dddddrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr</Label>
         <Label Margin="35,85,0,0" HorizontalAlignment="Left" Width="178" Height="29" VerticalAlignment="Top">List of active forwarding ports:</Label>
-        <ListBox  Name="PortsList" HorizontalAlignment="Left" Height="124" Margin="35,119,0,0" VerticalAlignment="Top" Width="443"/>
-        <Label Margin="35,248,0,0" HorizontalAlignment="Left" Width="178" Height="29" VerticalAlignment="Top">Console:</Label>
-        <TextBox Name="ConsoleBox" IsEnabled="False"  HorizontalAlignment="Left" Height="205" Margin="35,282,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="443"/>
+        <ListBox Name="PortsList" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedForwardedPort}" HorizontalAlignment="Left" Height="124" Margin="35,119,0,0" VerticalAlignment="Top" Width="443">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding HostPort}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label Margin="35,413,0,0" HorizontalAlignment="Left" Width="178" Height="29" VerticalAlignment="Top">Console:</Label>
+        <TextBox Name="ConsoleBox" IsEnabled="False"  HorizontalAlignment="Left" Height="40" Margin="35,447,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="443"/>
 
     </Grid>
 </Window>
