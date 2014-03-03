@@ -14,7 +14,7 @@
 
         <Button Name="Delete" Margin="510,104,0,0" RenderTransformOrigin="2.8,0.467" HorizontalAlignment="Left" Width="73" Height="25" VerticalAlignment="Top" Click="Delete_OnClick">Delete</Button>
 
-        <Button Name="Dump" Margin="510,162,0,0" RenderTransformOrigin="2.8,0.467" Click="ShowAll_OnClick" HorizontalAlignment="Left" Width="73" Height="25" VerticalAlignment="Top">Show all</Button>
+        <Button Name="Dump" Margin="510,162,0,0" RenderTransformOrigin="2.8,0.467" Click="RefreshConnections" HorizontalAlignment="Left" Width="73" Height="25" VerticalAlignment="Top">Show all</Button>
         <Label Foreground="#FFFD1801" Visibility="Hidden" Name="ValidationLabel" Height="96" VerticalAlignment="Top" HorizontalAlignment="Left" Width="443" Margin="35,492,0,0" FlowDirection="LeftToRight">dddddrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr</Label>
         <Label Margin="35,85,0,0" HorizontalAlignment="Left" Width="178" Height="29" VerticalAlignment="Top">List of active forwarding ports:</Label>
         <ListBox  Name="PortsList" HorizontalAlignment="Left" Height="124" Margin="35,119,0,0" VerticalAlignment="Top" Width="443"/>
