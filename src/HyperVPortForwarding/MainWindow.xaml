@@ -26,6 +26,9 @@
         <Style TargetType="GroupBox">
             <Setter Property="Padding" Value="10"></Setter>
         </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
     </Window.Resources>
     <Grid Background="DarkGray">
         <Grid.ColumnDefinitions>
@@ -62,7 +65,7 @@
                         <Button Command="{Binding RemoveAllPortsCommand}" Margin="0,10,0,0">Remove All</Button>
                     </StackPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Stretch">
-                        <DataGrid Name="ItemsDataGrid" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedForwardedPort}"  VerticalContentAlignment="Stretch"
+                        <DataGrid ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedForwardedPort}"  VerticalContentAlignment="Stretch"
                                   AutoGenerateColumns="False"
                                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False"
                                   SelectionMode="Single" SelectionUnit="FullRow"
@@ -74,24 +77,24 @@
                                   VerticalGridLinesBrush="Transparent"
                                   >
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Host Port" Width="*" IsReadOnly="True">
+                                <DataGridTemplateColumn Header="Host Port" Width="95" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=HostPort}" Margin="5,0,0,0"/>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding Path=HostPort}" Margin="0,0,45,0"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Virtual Machine IP Address" Width="*" IsReadOnly="True">
+                                <DataGridTemplateColumn Header="Virtual Machine IP Address" Width="160" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=VmIpAddress}" Margin="5,0,0,0"/>
+                                            <TextBlock Text="{Binding Path=VmIpAddress}" Margin="40,0,0,0"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Header="Virtual Machine Port" Width="*" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=VmPort}" Margin="5,0,0,0"/>
+                                            <TextBlock HorizontalAlignment="Right" Text="{Binding Path=VmPort}" Margin="0,0,50,0"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
