@@ -1,0 +1,1 @@
+New-VMSwitch -Name HyperVVmswitch -SwitchType Internal

@@ -1,0 +1,1 @@
+Connect-VMNetworkAdapter –VMName Krzysia –SwitchName HyperVVmswitch
