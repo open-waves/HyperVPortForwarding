@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Management.Automation;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 using log4net;
 
@@ -116,7 +117,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             catch (Exception exception)
             {
                 Log.Error("ExecuteScript", exception);
-                throw;
+                App.ShowExceptionInMessageBox(exception);
             }
         }
 
