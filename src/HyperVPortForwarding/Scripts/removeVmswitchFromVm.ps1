@@ -1,1 +1,1 @@
-Disconnect-VMNetworkAdapter –VMName Krzysia
+Disconnect-VMNetworkAdapter -VMName *

@@ -146,7 +146,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             process.WaitForExit();
         }
 
-        private static Process CreateProcess(string args)
+        public static Process CreateProcess(string args)
         {
             var processStartInfo = new ProcessStartInfo("cmd.exe")
             {

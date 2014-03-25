@@ -1,4 +1,6 @@
-﻿using System.Management.Automation;
+﻿using System;
+using System.Diagnostics;
+using System.Management.Automation;
 using System.Reflection;
 using System.Windows.Input;
 using log4net;
@@ -13,6 +15,26 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         public NetworkConnectionViewModel()
         {
             VmswitchExists = IsNetworkConnectionLive();
+            TemporaryAllowRunningPowerShellScripts();
+            RegisterLibrary();
+        }
+
+        private void TemporaryAllowRunningPowerShellScripts()
+        {
+            var powerShell = PowerShell.Create();
+
+            powerShell.AddScript("Set-ExecutionPolicy Bypass -Scope Process");
+
+            powerShell.Invoke();
+            PSDataCollection<ErrorRecord> error = powerShell.Streams.Error;
+            LogIfErrorOccurred(error);
+        }
+
+        private void RegisterLibrary()
+        {
+            // TODO This needs to be done only once, but don't see good way to check it (now)
+            Process process = MainViewModel.CreateProcess("regsvr32 hnetcfg.dll");
+            process.Start();
         }
 
         private bool _vmswitchExists;
@@ -81,13 +103,21 @@ namespace MakingWaves.Tools.HyperVPortForwarding
 
         private void ExecuteScript(string scriptName)
         {
-            var powerShell = PowerShell.Create();
+            try
+            {
+                var powerShell = PowerShell.Create();
 
-            powerShell.AddScript(GetScript(scriptName));
+                powerShell.AddScript(GetScript(scriptName));
 
-            powerShell.Invoke();
-            PSDataCollection<ErrorRecord> error = powerShell.Streams.Error;
-            LogIfErrorOccurred(error);
+                powerShell.Invoke();
+                PSDataCollection<ErrorRecord> error = powerShell.Streams.Error;
+                LogIfErrorOccurred(error);
+            }
+            catch (Exception exception)
+            {
+                Log.Error("ExecuteScript", exception);
+                throw;
+            }
         }
 
         private void LogIfErrorOccurred(PSDataCollection<ErrorRecord> errors)
@@ -137,7 +167,8 @@ namespace MakingWaves.Tools.HyperVPortForwarding
 
         private void OnShareThroughEthernetCommand()
         {
-            ExecuteScript("selectVmswitchForVM");
+            ExecuteScript("disableEthernet");
+//            ExecuteScript("selectVmswitchForVM");
             ExecuteScript("shareThroughEthernet");
         }
 
