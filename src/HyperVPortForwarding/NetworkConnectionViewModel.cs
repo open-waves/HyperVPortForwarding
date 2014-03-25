@@ -161,9 +161,23 @@ namespace MakingWaves.Tools.HyperVPortForwarding
 
         private void OnShareThroughEthernetCommand()
         {
-            ExecuteScript("disableEthernet");
-            //            ExecuteScript("selectVmswitchForVM");
+            ExecuteScript("disableWifi");
             ExecuteScript("shareThroughEthernet");
+        }
+
+        RelayCommand _shareThroughWifiCommand;
+        public ICommand ShareThroughWifiCommand
+        {
+            get
+            {
+                return _shareThroughWifiCommand ?? (_shareThroughWifiCommand = new RelayCommand(param => OnShareThroughWifiCommand(), param => true));
+            }
+        }
+
+        private void OnShareThroughWifiCommand()
+        {
+            ExecuteScript("disableEthernet");
+            ExecuteScript("shareThroughWifi");
         }
 
         private void OnRemoveVmswitchFromVmCommand()

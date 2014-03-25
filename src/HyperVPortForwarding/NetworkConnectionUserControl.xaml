@@ -13,5 +13,6 @@
         <Button Command="{Binding SetIpCommand}" Margin="0,50,0,0">Set ip</Button>
         <Button Command="{Binding SelectVmswitchForVmCommand}">Select VM Swtich for Virtual Machine</Button>
         <Button Command="{Binding ShareThroughEthernetCommand}">Share through Ethernet</Button>
+        <Button Command="{Binding ShareThroughWifiCommand}">Share through Wifi</Button>
     </StackPanel>
 </UserControl>
