@@ -2,13 +2,14 @@
 using System.Diagnostics;
 using System.Management.Automation;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Input;
 using log4net;
+using PropertyChanged;
 
 namespace MakingWaves.Tools.HyperVPortForwarding
 {
-    public class NetworkConnectionViewModel : ViewModelBase
+    [ImplementPropertyChanged]
+    public class NetworkConnectionViewModel
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private const string VmswitchName = "HyperVVmswitch";
@@ -38,15 +39,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             process.Start();
         }
 
-        private bool _vmswitchExists;
-        public bool VmswitchExists
-        {
-            get { return _vmswitchExists; }
-            set
-            {
-                SetField(ref _vmswitchExists, value, () => VmswitchExists);
-            }
-        }
+        public bool VmswitchExists { get; set; }
 
         RelayCommand _addNewNetworkConnectionCommand;
         public ICommand AddNetworkConnectionCommand
@@ -66,7 +59,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             var wmswitches = powerShell.Invoke();
             foreach (var wmswitch in wmswitches)
             {
-                var psPropertyInfo= wmswitch.Properties["Name"];
+                var psPropertyInfo = wmswitch.Properties["Name"];
                 var name = psPropertyInfo.Value as string;
                 if (name == VmswitchName)
                 {
@@ -98,7 +91,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             OnRemoveVmswitchFromVmCommand();
 
             ExecuteScript("removeConnection");
-            
+
             VmswitchExists = IsNetworkConnectionLive();
         }
 
@@ -169,7 +162,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         private void OnShareThroughEthernetCommand()
         {
             ExecuteScript("disableEthernet");
-//            ExecuteScript("selectVmswitchForVM");
+            //            ExecuteScript("selectVmswitchForVM");
             ExecuteScript("shareThroughEthernet");
         }
 

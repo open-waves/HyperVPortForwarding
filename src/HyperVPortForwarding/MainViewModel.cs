@@ -6,10 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Windows.Input;
 using System.Windows.Threading;
+using PropertyChanged;
 
 namespace MakingWaves.Tools.HyperVPortForwarding
 {
-    public class MainViewModel : ViewModelBase
+    [ImplementPropertyChanged]
+    public class MainViewModel
     {
         private readonly Dispatcher _dispatcher;
 
@@ -29,22 +31,9 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         public int? HostPort { get; set; }
         public int? VmPort { get; set; }
 
-        private string _vmIpAddress;
-        public string VmIpAddress
-        {
-            get { return _vmIpAddress; }
-            set
-            {
-                SetField(ref _vmIpAddress, value, () => VmIpAddress);
-            }
-        }
+        public string VmIpAddress { get; set; }
 
-        private ForwardedPort _selectedForwardedPort;
-        public ForwardedPort SelectedForwardedPort
-        {
-            get { return _selectedForwardedPort; }
-            set { SetField(ref _selectedForwardedPort, value, () => SelectedForwardedPort); }
-        }
+        public ForwardedPort SelectedForwardedPort { get; set; }
 
         RelayCommand _addPortCommand;
         public ICommand AddPortCommand
