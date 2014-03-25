@@ -75,6 +75,9 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             ExecuteScript("addConnection");
 
             VmswitchExists = IsNetworkConnectionLive();
+
+            ExecuteScript("setIp");
+            ExecuteScript("selectVmswitchForVM");
         }
 
         RelayCommand _removeNetworkConnectionCommand;
@@ -120,34 +123,6 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             {
                 Log.Warn("PowerShell error", errorRecord.Exception);
             }
-        }
-
-        RelayCommand _setIpCommand;
-        public ICommand SetIpCommand
-        {
-            get
-            {
-                return _setIpCommand ?? (_setIpCommand = new RelayCommand(param => OnSetIpCommand(), param => true));
-            }
-        }
-
-        private void OnSetIpCommand()
-        {
-            ExecuteScript("setIp");
-        }
-
-        RelayCommand _selectVmswitchForVmCommand;
-        public ICommand SelectVmswitchForVmCommand
-        {
-            get
-            {
-                return _selectVmswitchForVmCommand ?? (_selectVmswitchForVmCommand = new RelayCommand(param => OnSelectVmswitchForVmCommand(), param => true));
-            }
-        }
-
-        private void OnSelectVmswitchForVmCommand()
-        {
-            ExecuteScript("selectVmswitchForVM");
         }
 
         RelayCommand _shareThroughEthernetCommand;
