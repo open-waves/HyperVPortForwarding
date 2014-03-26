@@ -1,1 +1,0 @@
-.\Scripts\IcsManager.exe disable "Wi-Fi"

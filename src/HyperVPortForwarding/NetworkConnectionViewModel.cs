@@ -92,6 +92,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         private void OnRemoveNetworkConnectionCommand()
         {
             OnRemoveVmswitchFromVmCommand();
+            ExecuteScript("disableSharing");
 
             ExecuteScript("removeConnection");
 
@@ -130,13 +131,13 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         {
             get
             {
-                return _shareThroughEthernetCommand ?? (_shareThroughEthernetCommand = new RelayCommand(param => OnShareThroughEthernetCommand(), param => true));
+                return _shareThroughEthernetCommand ?? (_shareThroughEthernetCommand = new RelayCommand(param => OnShareThroughEthernetCommand(), param => VmswitchExists));
             }
         }
 
         private void OnShareThroughEthernetCommand()
         {
-            ExecuteScript("disableWifi");
+            ExecuteScript("disableSharing");
             ExecuteScript("shareThroughEthernet");
         }
 
@@ -145,13 +146,13 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         {
             get
             {
-                return _shareThroughWifiCommand ?? (_shareThroughWifiCommand = new RelayCommand(param => OnShareThroughWifiCommand(), param => true));
+                return _shareThroughWifiCommand ?? (_shareThroughWifiCommand = new RelayCommand(param => OnShareThroughWifiCommand(), param => VmswitchExists));
             }
         }
 
         private void OnShareThroughWifiCommand()
         {
-            ExecuteScript("disableEthernet");
+            ExecuteScript("disableSharing");
             ExecuteScript("shareThroughWifi");
         }
 

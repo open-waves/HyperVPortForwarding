@@ -1,0 +1,1 @@
+.\Scripts\IcsManager.exe disable
