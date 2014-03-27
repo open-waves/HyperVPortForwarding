@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Management.Automation;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 using log4net;
 using PropertyChanged;
@@ -56,19 +57,28 @@ namespace MakingWaves.Tools.HyperVPortForwarding
 
         private bool IsNetworkConnectionLive()
         {
-            var powerShell = PowerShell.Create();
-
-            powerShell.AddCommand("Get-vmswitch");
-
-            var wmswitches = powerShell.Invoke();
-            foreach (var wmswitch in wmswitches)
+            try
             {
-                var psPropertyInfo = wmswitch.Properties["Name"];
-                var name = psPropertyInfo.Value as string;
-                if (name == VmswitchName)
+                var powerShell = PowerShell.Create();
+
+                powerShell.AddCommand("Get-vmswitch");
+
+                var wmswitches = powerShell.Invoke();
+                foreach (var wmswitch in wmswitches)
                 {
-                    return true;
+                    var psPropertyInfo = wmswitch.Properties["Name"];
+                    var name = psPropertyInfo.Value as string;
+                    if (name == VmswitchName)
+                    {
+                        return true;
+                    }
                 }
+            }
+            catch (CommandNotFoundException exception)
+            {
+                Log.Error("IsNetworkConnectionLive", exception);
+                App.ShowMessageBox("It looks like you have not installed HyperV yet.");
+                Application.Current.Shutdown();
             }
 
             return false;

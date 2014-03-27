@@ -32,5 +32,10 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             string errorMessage = string.Format("An unhandled exception occurred: {0}", exception.Message);
             MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
+        public static void ShowMessageBox(string messages)
+        {
+            MessageBox.Show(messages, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }
