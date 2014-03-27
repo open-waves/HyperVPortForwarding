@@ -9,14 +9,23 @@
              >
     <UserControl.Resources>
         <Style TargetType="Button">
-            <Setter Property="Width" Value="200"/>
+            <Setter Property="Width" Value="160"/>
+            <Setter Property="Margin" Value="0,2,0,2"/>
         </Style>
     </UserControl.Resources>
-    <StackPanel>
-        <Button Command="{Binding AddNetworkConnectionCommand}">Add switch</Button>
-        <Button Command="{Binding RemoveNetworkConnectionCommand}" Margin="0,0,0,50">Remove switch</Button>
-        <Button Command="{Binding ShareThroughEthernetCommand}">Share through Ethernet</Button>
-        <Button Command="{Binding ShareThroughWifiCommand}">Share through Wifi</Button>
-        <Button Command="{Binding ClearSharingCommand}">Clear sharing</Button>
-    </StackPanel>
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Padding="25">
+            <StackPanel>
+                <Button Command="{Binding AddNetworkConnectionCommand}">Add switch</Button>
+                <Button Command="{Binding RemoveNetworkConnectionCommand}">Remove switch</Button>
+            </StackPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" Padding="25">
+            <StackPanel DockPanel.Dock="Bottom">
+                <Button Command="{Binding ShareThroughEthernetCommand}">Share through Ethernet</Button>
+                <Button Command="{Binding ShareThroughWifiCommand}">Share through Wifi</Button>
+                <Button Command="{Binding ClearSharingCommand}">Clear sharing</Button>
+            </StackPanel>
+        </Border>
+    </DockPanel>
 </UserControl>
