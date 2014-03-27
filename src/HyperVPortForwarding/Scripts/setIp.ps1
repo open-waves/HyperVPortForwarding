@@ -1,1 +1,1 @@
-netsh interface ip set address name="vEthernet (MyInternalSwitch)" static 192.168.137.1 255.255.255.0
+netsh interface ip set address name="vEthernet (MyInternalSwitch)" static 192.168.137.4 255.255.255.0
