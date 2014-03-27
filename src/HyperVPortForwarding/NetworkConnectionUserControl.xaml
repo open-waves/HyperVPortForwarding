@@ -17,5 +17,6 @@
         <Button Command="{Binding RemoveNetworkConnectionCommand}" Margin="0,0,0,50">Remove switch</Button>
         <Button Command="{Binding ShareThroughEthernetCommand}">Share through Ethernet</Button>
         <Button Command="{Binding ShareThroughWifiCommand}">Share through Wifi</Button>
+        <Button Command="{Binding ClearSharingCommand}">Clear sharing</Button>
     </StackPanel>
 </UserControl>

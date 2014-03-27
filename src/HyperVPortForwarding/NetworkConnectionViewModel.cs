@@ -156,6 +156,20 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             ExecuteScript("shareThroughWifi");
         }
 
+        RelayCommand _clearSharingCommand;
+        public ICommand ClearSharingCommand
+        {
+            get
+            {
+                return _clearSharingCommand ?? (_clearSharingCommand = new RelayCommand(param => OnClearSharingCommand(), param => VmswitchExists));
+            }
+        }
+
+        private void OnClearSharingCommand()
+        {
+            ExecuteScript("disableSharing");
+        }
+
         private void OnRemoveVmswitchFromVmCommand()
         {
             ExecuteScript("removeVmswitchFromVm");
