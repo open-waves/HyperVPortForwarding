@@ -12,7 +12,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
     public class NetworkConnectionViewModel
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private const string VmswitchName = "HyperVVmswitch";
+        private const string VmswitchName = "MyInternalSwitch";
 
         public NetworkConnectionViewModel()
         {

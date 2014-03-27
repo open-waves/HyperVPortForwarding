@@ -1,1 +1,1 @@
-Connect-VMNetworkAdapter -VMName * -SwitchName HyperVVmswitch
+Connect-VMNetworkAdapter -VMName * -SwitchName MyInternalSwitch

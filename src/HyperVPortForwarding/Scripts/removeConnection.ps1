@@ -1,1 +1,1 @@
-Remove-VMSwitch -Name HyperVVmswitch -Force
+Remove-VMSwitch -Name MyInternalSwitch -Force

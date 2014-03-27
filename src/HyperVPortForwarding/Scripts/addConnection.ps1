@@ -1,1 +1,1 @@
-New-VMSwitch -Name HyperVVmswitch -SwitchType Internal
+New-VMSwitch -Name MyInternalSwitch -SwitchType Internal

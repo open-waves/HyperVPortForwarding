@@ -1,1 +1,1 @@
-.\Scripts\IcsManager.exe enable "Ethernet" "vEthernet (HyperVVmswitch)"
+.\Scripts\IcsManager.exe enable "Ethernet" "vEthernet (MyInternalSwitch)"
