@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Management.Automation;
 using System.Reflection;
 using System.Windows.Input;
@@ -18,7 +19,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         {
             VmswitchExists = IsNetworkConnectionLive();
             TemporaryAllowRunningPowerShellScripts();
-            RegisterLibrary();
+            RegisterIcsLibrary();
         }
 
         private void TemporaryAllowRunningPowerShellScripts()
@@ -32,10 +33,13 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             LogIfErrorOccurred(error);
         }
 
-        private void RegisterLibrary()
+        private void RegisterIcsLibrary()
         {
-            // TODO This needs to be done only once, but don't see good way to check it (now)
-            Process process = MainViewModel.CreateProcess("regsvr32 hnetcfg.dll");
+            var dllName = "hnetcfg.dll";
+            if (File.Exists(Path.Combine(Environment.SystemDirectory, dllName)))
+                return;
+
+            Process process = MainViewModel.CreateProcess(string.Format("regsvr32 {0}", dllName));
             process.Start();
         }
 
