@@ -5,7 +5,7 @@
         xmlns:hyperV="clr-namespace:MakingWaves.Tools.HyperVPortForwarding"
         Title="Hyper V Port Forwarding" 
         DataContext="{StaticResource MainViewModel}"
-        Width="550" MinWidth="550" MaxWidth="550" MinHeight="340" Height="340"
+        Width="550" MinWidth="550" MaxWidth="550" MinHeight="340" Height="400"
         >
     <Window.Resources>
         <Style TargetType="Label">
@@ -32,13 +32,18 @@
         </Style>
     </Window.Resources>
     <TabControl Background="DarkGray">
-        <TabItem Header="Network connections">
+        <TabItem Header="Vmdk Converter">
+            <hyperV:VmdkConverterUserControl>
+
+            </hyperV:VmdkConverterUserControl>
+        </TabItem>
+         <TabItem Header="Network connections">
             <hyperV:NetworkConnectionUserControl>
 
             </hyperV:NetworkConnectionUserControl>
         </TabItem>
         <TabItem Header="Port forwarding">
-            <DockPanel LastChildFill="True" Margin="5,5,5,4.8" Grid.ColumnSpan="3">
+            <DockPanel LastChildFill="True" Margin="5,5,5,4.8">
                 <GroupBox Header="Adding new forwarding port" DockPanel.Dock="Top" Height="100">
                     <Grid>
                         <Grid.RowDefinitions>

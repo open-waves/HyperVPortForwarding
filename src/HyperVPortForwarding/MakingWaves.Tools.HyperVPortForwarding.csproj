@@ -109,6 +109,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Vmdk2Vhd">
+      <HintPath>..\libraries\Vmdk2Vhd.exe</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -144,6 +147,10 @@
     </Compile>
     <Compile Include="NetworkConnectionViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="VmdkConverterUserControl.xaml.cs">
+      <DependentUpon>VmdkConverterUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VmdkConverterViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -157,6 +164,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="NetworkConnectionUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VmdkConverterUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

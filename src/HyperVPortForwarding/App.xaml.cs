@@ -6,9 +6,6 @@ using log4net;
 
 namespace MakingWaves.Tools.HyperVPortForwarding
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -33,7 +30,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        public static void ShowMessageBox(string messages)
+        public static void ShowErrorMessage(string messages)
         {
             MessageBox.Show(messages, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }

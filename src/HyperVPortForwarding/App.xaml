@@ -6,5 +6,6 @@
     <Application.Resources>
         <hyperV:MainViewModel x:Key="MainViewModel" />
         <hyperV:NetworkConnectionViewModel x:Key="NetworkConnectionViewModel" />
+        <hyperV:VmdkConverterViewModel x:Key="VmdkConverterViewModel" />
     </Application.Resources>
 </Application>

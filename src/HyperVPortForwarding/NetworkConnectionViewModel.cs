@@ -16,11 +16,14 @@ namespace MakingWaves.Tools.HyperVPortForwarding
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private const string VmswitchName = "MyInternalSwitch";
 
+        public bool VmswitchExists { get; set; }
+
         public NetworkConnectionViewModel()
         {
             VmswitchExists = IsNetworkConnectionLive();
             TemporaryAllowRunningPowerShellScripts();
             RegisterIcsLibrary();
+            CheckScriptsFolder();
         }
 
         private void TemporaryAllowRunningPowerShellScripts()
@@ -44,7 +47,15 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             process.Start();
         }
 
-        public bool VmswitchExists { get; set; }
+        [Conditional("Debug")]
+        private void CheckScriptsFolder()
+        {
+            if (Directory.Exists("Scripts") == false)
+            {
+                App.ShowErrorMessage("'Scripts' folder is missing. You need to copy it.");
+                Application.Current.Shutdown();
+            }
+        }
 
         RelayCommand _addNewNetworkConnectionCommand;
         public ICommand AddNetworkConnectionCommand
@@ -76,12 +87,18 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             }
             catch (CommandNotFoundException exception)
             {
-                Log.Error("IsNetworkConnectionLive", exception);
-                App.ShowMessageBox("It looks like you have not installed HyperV yet.");
-                Application.Current.Shutdown();
+                LogAndShutdown(exception);
             }
 
             return false;
+        }
+
+        [Conditional("Debug")]
+        private static void LogAndShutdown(CommandNotFoundException exception)
+        {
+            Log.Error("IsNetworkConnectionLive", exception);
+            App.ShowErrorMessage("It looks like you have not installed HyperV yet.");
+            Application.Current.Shutdown();
         }
 
         private void OnAddNetworkConnectionCommand()
