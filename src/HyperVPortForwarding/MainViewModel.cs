@@ -122,6 +122,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
 
             foreach (var forwardedPort in ports)
             {
+                // Creating tuple to avoid closure
                 var item = Tuple.Create(forwardedPort);
                 Action del = () => Items.Add(item.Item1);
                 _dispatcher.BeginInvoke(del);

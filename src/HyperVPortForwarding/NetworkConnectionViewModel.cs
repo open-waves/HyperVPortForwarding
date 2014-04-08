@@ -47,7 +47,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             process.Start();
         }
 
-        [Conditional("Debug")]
+        [Conditional("RELEASE")]
         private void CheckScriptsFolder()
         {
             if (Directory.Exists("Scripts") == false)
@@ -93,7 +93,7 @@ namespace MakingWaves.Tools.HyperVPortForwarding
             return false;
         }
 
-        [Conditional("Debug")]
+        [Conditional("RELEASE")]
         private static void LogAndShutdown(CommandNotFoundException exception)
         {
             Log.Error("IsNetworkConnectionLive", exception);
