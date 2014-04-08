@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Input;
 
-namespace MakingWaves.Tools.HyperVPortForwarding
+namespace MakingWaves.Tools.HyperVManagerHelper
 {
     public partial class MainWindow
     {

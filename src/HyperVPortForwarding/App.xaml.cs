@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Threading;
 using log4net;
 
-namespace MakingWaves.Tools.HyperVPortForwarding
+namespace MakingWaves.Tools.HyperVManagerHelper
 {
     public partial class App : Application
     {

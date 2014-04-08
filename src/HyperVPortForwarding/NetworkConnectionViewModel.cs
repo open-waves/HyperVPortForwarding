@@ -8,7 +8,7 @@ using System.Windows.Input;
 using log4net;
 using PropertyChanged;
 
-namespace MakingWaves.Tools.HyperVPortForwarding
+namespace MakingWaves.Tools.HyperVManagerHelper
 {
     [ImplementPropertyChanged]
     public class NetworkConnectionViewModel

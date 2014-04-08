@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace MakingWaves.Tools.HyperVPortForwarding
+namespace MakingWaves.Tools.HyperVManagerHelper
 {
     public class ForwardedPort
     {

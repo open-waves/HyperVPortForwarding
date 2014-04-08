@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace MakingWaves.Tools.HyperVPortForwarding
+namespace MakingWaves.Tools.HyperVManagerHelper
 {
     /// <summary>
     /// Interaction logic for VmdkConverterUserControl.xaml

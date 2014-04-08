@@ -8,7 +8,7 @@ using PropertyChanged;
 using Xcarab.Vmdk;
 using Xcarab.VmdkConvert;
 
-namespace MakingWaves.Tools.HyperVPortForwarding
+namespace MakingWaves.Tools.HyperVManagerHelper
 {
     [ImplementPropertyChanged]
     public class VmdkConverterViewModel

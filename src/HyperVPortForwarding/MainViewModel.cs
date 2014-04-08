@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using PropertyChanged;
 
-namespace MakingWaves.Tools.HyperVPortForwarding
+namespace MakingWaves.Tools.HyperVManagerHelper
 {
     [ImplementPropertyChanged]
     public class MainViewModel

@@ -1,7 +1,7 @@
-﻿<Application x:Class="MakingWaves.Tools.HyperVPortForwarding.App"
+﻿<Application x:Class="MakingWaves.Tools.HyperVManagerHelper.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:hyperV="clr-namespace:MakingWaves.Tools.HyperVPortForwarding"
+             xmlns:hyperV="clr-namespace:MakingWaves.Tools.HyperVManagerHelper"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <hyperV:MainViewModel x:Key="MainViewModel" />
