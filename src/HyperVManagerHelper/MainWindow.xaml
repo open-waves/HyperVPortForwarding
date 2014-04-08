@@ -31,48 +31,49 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
-    <TabControl Background="DarkGray">
-        <TabItem Header="Vmdk Converter">
-            <hyperV:VmdkConverterUserControl>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Help">
+                <MenuItem Header="_View online help" Click="MenuItem_OnClick"/>
+            </MenuItem>
+        </Menu>
+        <TabControl Background="DarkGray">
+            <TabItem Header="Network connections">
+                <hyperV:NetworkConnectionUserControl>
 
-            </hyperV:VmdkConverterUserControl>
-        </TabItem>
-         <TabItem Header="Network connections">
-            <hyperV:NetworkConnectionUserControl>
-
-            </hyperV:NetworkConnectionUserControl>
-        </TabItem>
-        <TabItem Header="Port forwarding">
-            <DockPanel LastChildFill="True" Margin="5,5,5,4.8">
-                <GroupBox Header="Adding new forwarding port" DockPanel.Dock="Top" Height="100">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0">Host Port:</Label>
-                        <Label Grid.Row="0" Grid.Column="1">Virtual Machine IP Address:</Label>
-                        <Label Grid.Row="0" Grid.Column="2">Virtual Machine Port:</Label>
-                        <xctk:IntegerUpDown Value="{Binding Path=HostPort}" Grid.Row="1" Grid.Column="0"/>
-                        <TextBox VerticalContentAlignment="Center" Text="{Binding Path=VmIpAddress}" PreviewTextInput="PreviewTextInputForIpAddress" Grid.Row="1" Grid.Column="1"/>
-                        <xctk:IntegerUpDown Value="{Binding Path=VmPort}" Grid.Row="1" Grid.Column="2" ToolTip="When empty - Host Port will be used" Grid.ColumnSpan="2" Margin="0,0,92,0"/>
-                        <Button HorizontalAlignment="Right" Margin="14,0,0,0" Command="{Binding AddPortCommand}" Grid.Row="1" Grid.Column="3">Add</Button>
-                    </Grid>
-                </GroupBox>
-                <GroupBox Margin="0,10,0,0" Header="List of active forwarding ports" DockPanel.Dock="Bottom">
-                    <DockPanel>
-                        <StackPanel DockPanel.Dock="Right" Margin="14,1,0,0">
-                            <Button Command="{Binding RemovePortCommand}" >Remove Port</Button>
-                            <Button Command="{Binding RemoveAllPortsCommand}" Margin="0,10,0,0">Remove All</Button>
-                        </StackPanel>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Stretch">
-                            <DataGrid ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedForwardedPort}"  VerticalContentAlignment="Stretch"
+                </hyperV:NetworkConnectionUserControl>
+            </TabItem>
+            <TabItem Header="Port forwarding">
+                <DockPanel LastChildFill="True" Margin="5,5,5,4.8">
+                    <GroupBox Header="Adding new forwarding port" DockPanel.Dock="Top" Height="100">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0">Host Port:</Label>
+                            <Label Grid.Row="0" Grid.Column="1">Virtual Machine IP Address:</Label>
+                            <Label Grid.Row="0" Grid.Column="2">Virtual Machine Port:</Label>
+                            <xctk:IntegerUpDown Value="{Binding Path=HostPort}" Grid.Row="1" Grid.Column="0"/>
+                            <TextBox VerticalContentAlignment="Center" Text="{Binding Path=VmIpAddress}" PreviewTextInput="PreviewTextInputForIpAddress" Grid.Row="1" Grid.Column="1"/>
+                            <xctk:IntegerUpDown Value="{Binding Path=VmPort}" Grid.Row="1" Grid.Column="2" ToolTip="When empty - Host Port will be used" Grid.ColumnSpan="2" Margin="0,0,92,0"/>
+                            <Button HorizontalAlignment="Right" Margin="14,0,0,0" Command="{Binding AddPortCommand}" Grid.Row="1" Grid.Column="3">Add</Button>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Margin="0,10,0,0" Header="List of active forwarding ports" DockPanel.Dock="Bottom">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Right" Margin="14,1,0,0">
+                                <Button Command="{Binding RemovePortCommand}" >Remove Port</Button>
+                                <Button Command="{Binding RemoveAllPortsCommand}" Margin="0,10,0,0">Remove All</Button>
+                            </StackPanel>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Stretch">
+                                <DataGrid ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedForwardedPort}"  VerticalContentAlignment="Stretch"
                                   AutoGenerateColumns="False"
                                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False"
                                   SelectionMode="Single" SelectionUnit="FullRow"
@@ -83,34 +84,40 @@
                                   HorizontalGridLinesBrush="Transparent"
                                   VerticalGridLinesBrush="Transparent"
                                   >
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="Host Port" Width="95" IsReadOnly="True">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock HorizontalAlignment="Right" Text="{Binding Path=HostPort}" Margin="0,0,45,0"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="Virtual Machine IP Address" Width="160" IsReadOnly="True">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Path=VmIpAddress}" Margin="40,0,0,0"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="Virtual Machine Port" Width="*" IsReadOnly="True">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock HorizontalAlignment="Right" Text="{Binding Path=VmPort}" Margin="0,0,50,0"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </ScrollViewer>
-                    </DockPanel>
-                </GroupBox>
-            </DockPanel>
-        </TabItem>
-    </TabControl>
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="Host Port" Width="95" IsReadOnly="True">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock HorizontalAlignment="Right" Text="{Binding Path=HostPort}" Margin="0,0,45,0"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="Virtual Machine IP Address" Width="160" IsReadOnly="True">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=VmIpAddress}" Margin="40,0,0,0"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="Virtual Machine Port" Width="*" IsReadOnly="True">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock HorizontalAlignment="Right" Text="{Binding Path=VmPort}" Margin="0,0,50,0"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>
+                        </DockPanel>
+                    </GroupBox>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Vmdk Converter">
+                <hyperV:VmdkConverterUserControl>
+
+                </hyperV:VmdkConverterUserControl>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>

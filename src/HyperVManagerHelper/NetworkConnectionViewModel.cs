@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Management.Automation;
 using System.Reflection;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using log4net;
+using MakingWaves.Tools.HyperVManagerHelper.PowerShellParsing;
 using PropertyChanged;
 
 namespace MakingWaves.Tools.HyperVManagerHelper
@@ -17,13 +23,55 @@ namespace MakingWaves.Tools.HyperVManagerHelper
         private const string VmswitchName = "MyInternalSwitch";
 
         public bool VmswitchExists { get; set; }
+        public bool IsBusy { get; set; }
+        public bool IsSharedViaEthernet { get; set; }
+        public bool IsSharedViaWifi { get; set; }
 
         public NetworkConnectionViewModel()
         {
-            VmswitchExists = IsNetworkConnectionLive();
             TemporaryAllowRunningPowerShellScripts();
             RegisterIcsLibrary();
             CheckScriptsFolder();
+        }
+
+        public void RefreshVmswitch()
+        {
+            RunAsyncWithBusyIndicator(() =>
+            {
+                var isNetworkConnectionLive = IsNetworkConnectionLive();
+                VmswitchExists = isNetworkConnectionLive;
+
+                if (isNetworkConnectionLive)
+                {
+                    RefreshConnectionSharing();
+                }
+            });
+        }
+
+        private void RunAsyncWithBusyIndicator(Action action)
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+
+            worker.DoWork += (o, ea) => action();
+
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                MakeNotBusy();
+                CommandManager.InvalidateRequerySuggested();
+            };
+
+            MakeBusy();
+            worker.RunWorkerAsync();
+        }
+
+        private void MakeNotBusy()
+        {
+            Application.Current.Dispatcher.Invoke((Action)(() => IsBusy = false));
+        }
+
+        private void MakeBusy()
+        {
+            Application.Current.Dispatcher.Invoke((Action)(() => IsBusy = true));
         }
 
         private void TemporaryAllowRunningPowerShellScripts()
@@ -103,12 +151,15 @@ namespace MakingWaves.Tools.HyperVManagerHelper
 
         private void OnAddNetworkConnectionCommand()
         {
-            ExecuteScript("addConnection");
+            RunAsyncWithBusyIndicator(() =>
+            {
+                ExecuteScript("addConnection");
 
-            VmswitchExists = IsNetworkConnectionLive();
+                VmswitchExists = IsNetworkConnectionLive();
 
-            ExecuteScript("setIp");
-            ExecuteScript("selectVmswitchForVM");
+                ExecuteScript("setIp");
+                ExecuteScript("selectVmswitchForVM");
+            });
         }
 
         RelayCommand _removeNetworkConnectionCommand;
@@ -122,15 +173,18 @@ namespace MakingWaves.Tools.HyperVManagerHelper
 
         private void OnRemoveNetworkConnectionCommand()
         {
-            OnRemoveVmswitchFromVmCommand();
-            ExecuteScript("disableSharing");
+            RunAsyncWithBusyIndicator(() =>
+            {
+                ExecuteScript("removeVmswitchFromVm");
+                ExecuteScript("disableSharing");
 
-            ExecuteScript("removeConnection");
+                ExecuteScript("removeConnection");
 
-            VmswitchExists = IsNetworkConnectionLive();
+                VmswitchExists = IsNetworkConnectionLive();
+            });
         }
 
-        private void ExecuteScript(string scriptName)
+        private IEnumerable<PSObject> ExecuteScript(string scriptName)
         {
             try
             {
@@ -138,14 +192,18 @@ namespace MakingWaves.Tools.HyperVManagerHelper
 
                 powerShell.AddScript(GetScript(scriptName));
 
-                powerShell.Invoke();
+                Collection<PSObject> results = powerShell.Invoke();
                 PSDataCollection<ErrorRecord> error = powerShell.Streams.Error;
                 LogIfErrorOccurred(error);
+
+                return results;
             }
             catch (Exception exception)
             {
                 Log.Error("ExecuteScript", exception);
                 App.ShowExceptionInMessageBox(exception);
+
+                return Enumerable.Empty<PSObject>();
             }
         }
 
@@ -162,14 +220,36 @@ namespace MakingWaves.Tools.HyperVManagerHelper
         {
             get
             {
-                return _shareThroughEthernetCommand ?? (_shareThroughEthernetCommand = new RelayCommand(param => OnShareThroughEthernetCommand(), param => VmswitchExists));
+                return _shareThroughEthernetCommand ?? (_shareThroughEthernetCommand = new RelayCommand(param => OnShareThroughEthernetCommand(), param => VmswitchExists && IsSharedViaEthernet == false));
             }
         }
 
         private void OnShareThroughEthernetCommand()
         {
-            ExecuteScript("disableSharing");
-            ExecuteScript("shareThroughEthernet");
+            RunAsyncWithBusyIndicator(() =>
+            {
+                ExecuteScript("disableSharing");
+                ExecuteScript("shareThroughEthernet");
+
+                RefreshConnectionSharing();
+            });
+        }
+
+        private void RefreshConnectionSharing()
+        {
+            IEnumerable<PSObject> results = ExecuteScript("refreshSharing");
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var psObject in results)
+            {
+                sb.AppendLine(psObject.ToString());
+            }
+
+            SharingParser sharingParser = new SharingParser();
+            SharingDto sharingDto = sharingParser.Parse(sb.ToString());
+
+            Application.Current.Dispatcher.Invoke((Action)(() => IsSharedViaEthernet = sharingDto.IsEthernetShared));
+            Application.Current.Dispatcher.Invoke((Action)(() => IsSharedViaWifi = sharingDto.IsWifiShared));
         }
 
         RelayCommand _shareThroughWifiCommand;
@@ -177,14 +257,19 @@ namespace MakingWaves.Tools.HyperVManagerHelper
         {
             get
             {
-                return _shareThroughWifiCommand ?? (_shareThroughWifiCommand = new RelayCommand(param => OnShareThroughWifiCommand(), param => VmswitchExists));
+                return _shareThroughWifiCommand ?? (_shareThroughWifiCommand = new RelayCommand(param => OnShareThroughWifiCommand(), param => VmswitchExists && IsSharedViaWifi == false));
             }
         }
 
         private void OnShareThroughWifiCommand()
         {
-            ExecuteScript("disableSharing");
-            ExecuteScript("shareThroughWifi");
+            RunAsyncWithBusyIndicator(() =>
+            {
+                ExecuteScript("disableSharing");
+                ExecuteScript("shareThroughWifi");
+
+                RefreshConnectionSharing();
+            });
         }
 
         RelayCommand _clearSharingCommand;
@@ -192,18 +277,18 @@ namespace MakingWaves.Tools.HyperVManagerHelper
         {
             get
             {
-                return _clearSharingCommand ?? (_clearSharingCommand = new RelayCommand(param => OnClearSharingCommand(), param => VmswitchExists));
+                return _clearSharingCommand ?? (_clearSharingCommand = new RelayCommand(param => OnClearSharingCommand(), param => VmswitchExists && (IsSharedViaEthernet || IsSharedViaWifi)));
             }
         }
 
         private void OnClearSharingCommand()
         {
-            ExecuteScript("disableSharing");
-        }
+            RunAsyncWithBusyIndicator(() =>
+            {
+                ExecuteScript("disableSharing");
 
-        private void OnRemoveVmswitchFromVmCommand()
-        {
-            ExecuteScript("removeVmswitchFromVm");
+                RefreshConnectionSharing();
+            });
         }
 
         private string GetScript(string name)

@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{StaticResource NetworkConnectionViewModel}"
@@ -13,7 +14,8 @@
             <Setter Property="Margin" Value="0,2,0,2"/>
         </Style>
     </UserControl.Resources>
-    <DockPanel>
+    <xctk:BusyIndicator IsBusy="{Binding IsBusy}">
+        <DockPanel>
         <Border DockPanel.Dock="Top" Padding="25">
             <StackPanel>
                 <Button Command="{Binding AddNetworkConnectionCommand}">Add switch</Button>
@@ -28,4 +30,5 @@
             </StackPanel>
         </Border>
     </DockPanel>
+    </xctk:BusyIndicator>
 </UserControl>
