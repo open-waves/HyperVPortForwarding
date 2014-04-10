@@ -145,7 +145,7 @@ namespace MakingWaves.Tools.HyperVManagerHelper
         private static void LogAndShutdown(CommandNotFoundException exception)
         {
             Log.Error("IsNetworkConnectionLive", exception);
-            App.ShowErrorMessage("It looks like you have not installed HyperV yet.");
+            App.ShowErrorMessage("It looks like you have not installed Hyper-V yet.");
             Application.Current.Shutdown();
         }
 
@@ -175,6 +175,9 @@ namespace MakingWaves.Tools.HyperVManagerHelper
         {
             RunAsyncWithBusyIndicator(() =>
             {
+                ExecuteScript("disableSharing");
+                RefreshConnectionSharing();
+
                 ExecuteScript("removeVmswitchFromVm");
                 ExecuteScript("disableSharing");
 

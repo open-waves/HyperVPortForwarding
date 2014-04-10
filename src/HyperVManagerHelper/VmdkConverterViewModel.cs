@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using log4net;
 using Microsoft.Win32;
 using PropertyChanged;
 using Xcarab.Vmdk;
@@ -13,6 +15,8 @@ namespace MakingWaves.Tools.HyperVManagerHelper
     [ImplementPropertyChanged]
     public class VmdkConverterViewModel
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public string SourceFileText { get; set; }
         public string TargetFileText { get; set; }
         public bool IsConverting { get; set; }
@@ -66,8 +70,9 @@ namespace MakingWaves.Tools.HyperVManagerHelper
                         VmdkFile.CloseVmdk(diskInfo);
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Log.Error("Trying to open *.vmdk file.", ex);
                     MessageBox.Show("Invalid Vmdk file or file could not be opened");
                 }
             }
@@ -166,7 +171,7 @@ namespace MakingWaves.Tools.HyperVManagerHelper
 
             if (!_vmdkConverter.Aborted)
             {
-                MessageBox.Show("Conversion complete.", "Conversion complete");
+                MessageBox.Show("Conversion completed.", "Conversion completed");
             }
         }
 
